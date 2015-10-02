@@ -22,6 +22,19 @@ public class GunManManager : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        GameController.Instrance.BeginFire += OnBeginFire;
+    }
+
+    void OnBeginFire (object sender, GameControllerEventArgs e)
+    {
+        if (currentGunMan != null)
+        {
+            currentGunMan.AboutFire();
+        }
+    }
+
     public void AddRandomGunMan()
     {
         int index = Random.Range(0, gunMan.Length);
@@ -35,6 +48,6 @@ public class GunManManager : MonoBehaviour
     {
         currentGunMan.Die();
 
-        currentGunMan = null;
+        currentGunMan = null;  
     }
 }
