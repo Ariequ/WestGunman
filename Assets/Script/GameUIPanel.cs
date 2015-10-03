@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameUIPanel : BaseUIPanel
 {
+    public Text ScoreLabel;
+    public Text GunManTimeLabel;
+    public Text PlayerTimeLabel;
+
     private Animator animator;
 
     enum State
@@ -59,5 +64,20 @@ public class GameUIPanel : BaseUIPanel
     public void OnLoseFinish()
     {
         animator.SetInteger("state", (int)State.Normal);
+    }
+
+    public void UpdateScoreLabel(int score)
+    {
+        ScoreLabel.text = score.ToString();
+    }
+
+    public void UpdateGunManShootTimeLabel(float time)
+    {
+        GunManTimeLabel.text = time.ToString();
+    }
+
+    public void UpdatePlayerShootTime(float milliseconds)
+    {
+        PlayerTimeLabel.text = (milliseconds/1000).ToString();
     }
 }

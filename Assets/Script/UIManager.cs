@@ -82,6 +82,11 @@ public class UIManager : MonoBehaviour
     {
         panelDic[name].gameObject.SetActive(false);
         panelDic[name].OnHide();
-    }        
+    }   
+
+    public GameUIPanel GetGameUIPanel()
+    {
+        return currentPanel as GameUIPanel;
+    }
 }
 

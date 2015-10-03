@@ -2,6 +2,9 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+
+using Debug = UnityEngine.Debug;
 
 public class GameController : MonoBehaviour, IGameController
 {
@@ -27,6 +30,19 @@ public class GameController : MonoBehaviour, IGameController
 
     private bool gameStarted = false;
 
+    private GameData gameData;
+
+    private Stopwatch stopWatch;
+
+
+    public GameData GameData
+    {
+        get
+        {
+            return gameData;
+        }
+    }
+
     public static GameController Instrance
     {
         get
@@ -48,6 +64,11 @@ public class GameController : MonoBehaviour, IGameController
         clickHandle.Add(GameState.BeforeFire, BeforFireClick);
         clickHandle.Add(GameState.Fire, FireClick);
         clickHandle.Add(GameState.AfterFire, AfterFireClick);
+
+        gameData = new GameData();
+
+        stopWatch = new Stopwatch();
+        stopWatch.Start();
     }
 
     void Start()
@@ -79,6 +100,8 @@ public class GameController : MonoBehaviour, IGameController
 
         clickHandle.Clear();
         clickHandle = null;
+
+        gameData = null;
 
         instance = null;
     }
@@ -135,7 +158,11 @@ public class GameController : MonoBehaviour, IGameController
 
     private void StartRound()
     {
-        GunManManager.Instance.AddRandomGunMan();
+        GunMan added = GunManManager.Instance.AddRandomGunMan();
+
+        gameData.CurrentShootTime = added.ShootTime;
+
+        UIManager.Instance.GetGameUIPanel().UpdateGunManShootTimeLabel(gameData.CurrentShootTime);
 
         BeginFireInRandomTime();
 
@@ -157,6 +184,8 @@ public class GameController : MonoBehaviour, IGameController
         }
 
         currentState = GameState.Fire;
+
+        gameData.RoundFireBeginTime = stopWatch.ElapsedMilliseconds;
     }
 
     private void BeforFireClick()
@@ -183,10 +212,17 @@ public class GameController : MonoBehaviour, IGameController
 
         StartRound();
 
+        gameData.PlayerShootTime = stopWatch.ElapsedMilliseconds;
+
+        Debug.Log(gameData.PlayerShootTime);
+        Debug.Log(gameData.RoundFireBeginTime);
+
+        UIManager.Instance.GetGameUIPanel().UpdatePlayerShootTime(gameData.PlayerShootTime - gameData.RoundFireBeginTime);
+
         if (Win != null)
         {
             Win(this, new GameControllerEventArgs());
-        }
+        }            
     }
 
     private void AfterFireClick()

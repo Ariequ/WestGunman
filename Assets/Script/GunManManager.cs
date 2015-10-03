@@ -40,13 +40,17 @@ public class GunManManager : MonoBehaviour
         }
     }
 
-    public void AddRandomGunMan()
+    public GunMan AddRandomGunMan()
     {
         int index = Random.Range(0, gunMan.Length);
 
         GunMan man = gunMan[index];
 
         currentGunMan = Instantiate(man.gameObject).GetComponent<GunMan>();
+
+        currentGunMan.ShootTime = Random.Range(0.5f, 2f);
+
+        return currentGunMan;
     }
 
     public void RemoveCurrentGunMan()

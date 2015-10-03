@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GunMan : MonoBehaviour
 {
-    private float shootTime = 2f;
+    private float shootTime;
 
     void Start()
     {
@@ -24,8 +24,21 @@ public class GunMan : MonoBehaviour
     }
 
     public void AboutFire()
-    {
+    {        
         Invoke("Fire", shootTime);
+    }
+
+    public float ShootTime
+    {
+        get
+        {
+            return shootTime;
+        }
+
+        set
+        {
+            shootTime = value;
+        }
     }
 
     private void Fire()
