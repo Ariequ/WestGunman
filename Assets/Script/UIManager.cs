@@ -35,6 +35,28 @@ public class UIManager : MonoBehaviour
         }
 
         GameController.Instrance.BeginFire += OnBeginFire;
+        GameController.Instrance.Win += OnWin;
+        GameController.Instrance.Lose += OnLose;
+    }
+
+    public void Dispose()
+    {
+        panelDic.Clear();
+        panelDic = null;
+
+        GameController.Instrance.BeginFire -= OnBeginFire;
+    }
+
+    void OnWin (object sender, GameControllerEventArgs e)
+    {
+        GameUIPanel panel = currentPanel as GameUIPanel;
+        panel.ShowWin();
+    }
+
+    void OnLose (object sender, GameControllerEventArgs e)
+    {
+        GameUIPanel panel = currentPanel as GameUIPanel;
+        panel.ShowLose();
     }
 
     void OnBeginFire (object sender, GameControllerEventArgs e)

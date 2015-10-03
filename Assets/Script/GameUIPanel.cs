@@ -8,7 +8,9 @@ public class GameUIPanel : BaseUIPanel
     enum State
     {
         Normal,
-        BeginFire
+        BeginFire,
+        Win,
+        Lose
     }
 
     void Start()
@@ -35,6 +37,26 @@ public class GameUIPanel : BaseUIPanel
     }
 
     public void OnFireFinish()
+    {
+        animator.SetInteger("state", (int)State.Normal);
+    }
+
+    public void ShowWin()
+    {
+        animator.SetInteger("state", (int)State.Win);
+    }
+
+    public void OnWinFinish()
+    {
+        animator.SetInteger("state", (int)State.Normal);
+    }
+
+    public void ShowLose()
+    {
+        animator.SetInteger("state", (int)State.Lose);
+    }
+
+    public void OnLoseFinish()
     {
         animator.SetInteger("state", (int)State.Normal);
     }

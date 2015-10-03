@@ -27,6 +27,11 @@ public class GunManManager : MonoBehaviour
         GameController.Instrance.BeginFire += OnBeginFire;
     }
 
+    public void Dispose()
+    {
+        GameController.Instrance.BeginFire -= OnBeginFire;
+    }
+
     void OnBeginFire (object sender, GameControllerEventArgs e)
     {
         if (currentGunMan != null)

@@ -9,13 +9,17 @@ public class GameController : MonoBehaviour, IGameController
     {
         BeforeFire,
         Fire,
-        AfterFire
+        AfterFire,
+        Lose,
+        Win
     }
 
     private static GameController instance;  
 
     public event EventHandler<GameControllerEventArgs> GameStart;
     public event EventHandler<GameControllerEventArgs> BeginFire;
+    public event EventHandler<GameControllerEventArgs> Win;
+    public event EventHandler<GameControllerEventArgs> Lose;
 
     private Dictionary<GameState, Action> clickHandle = new Dictionary<GameState, Action>();
 
@@ -56,9 +60,28 @@ public class GameController : MonoBehaviour, IGameController
         if (gameStarted && Input.GetMouseButtonUp(0))
         {
             Debug.Log(currentState.ToString());
-            clickHandle[currentState]();
+
+            Action eventHandle;
+
+            clickHandle.TryGetValue(currentState, out eventHandle);
+
+            if (eventHandle != null)
+            {
+                eventHandle();
+            }
         }
-    }       
+    }    
+
+    void Dispose()
+    {
+        UIManager.Instance.Dispose();
+        GunManManager.Instance.Dispose();
+
+        clickHandle.Clear();
+        clickHandle = null;
+
+        instance = null;
+    }
 
     public void StartGame()
     {        
@@ -82,7 +105,24 @@ public class GameController : MonoBehaviour, IGameController
     {
         Debug.Log("Player die");
 
-        currentState = GameState.AfterFire;
+        currentState = GameState.Lose;
+
+        if (Lose != null)
+        {
+            Lose(this, new GameControllerEventArgs());
+        }
+
+        Invoke("ShowEndUILater", 1f);
+    }
+
+    private void ShowEndUILater()
+    {
+        UIManager.Instance.Show(EndUIPanel.GetPanelName());
+    }
+
+    public void Restart()
+    {
+        Application.LoadLevel(0);
     }
 
     protected virtual void OnStartGame(GameControllerEventArgs e)
@@ -120,11 +160,31 @@ public class GameController : MonoBehaviour, IGameController
     private void BeforFireClick()
     {
         Debug.Log("fire too early");
+
+        CancelInvoke();
+
+        currentState = GameState.Lose;
+
+        if (Lose != null)
+        {
+            Lose(this, new GameControllerEventArgs());
+        }
+
+        Invoke("ShowEndUILater", 1f);
     }
 
     private void FireClick()
     {
         Debug.Log("Win");
+
+        GunManManager.Instance.RemoveCurrentGunMan();
+
+        StartRound();
+
+        if (Win != null)
+        {
+            Win(this, new GameControllerEventArgs());
+        }
     }
 
     private void AfterFireClick()
