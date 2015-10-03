@@ -138,6 +138,8 @@ public class GameController : MonoBehaviour, IGameController
         GunManManager.Instance.AddRandomGunMan();
 
         BeginFireInRandomTime();
+
+        currentState = GameState.BeforeFire;
     }
 
     private void BeginFireInRandomTime()
