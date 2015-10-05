@@ -8,6 +8,8 @@ public class GameUIPanel : BaseUIPanel
     public Text GunManTimeLabel;
     public Text PlayerTimeLabel;
 
+    public GameObject FireSample;
+
     private Animator animator;
 
     enum State
@@ -38,6 +40,7 @@ public class GameUIPanel : BaseUIPanel
 
     public void ShowFire()
     {
+//        FireSample.SetActive(true);
         animator.SetInteger("state", (int)State.BeginFire);
     }
 

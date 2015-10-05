@@ -20,6 +20,7 @@ public class GunMan : MonoBehaviour
 
     public void Die()
     {
+        CancelInvoke();
         Destroy(gameObject);
     }
 
