@@ -73,10 +73,9 @@ public class UIManager : MonoBehaviour
         }
 
         panelDic[name].gameObject.SetActive(true);
-        panelDic[name].OnShow();
+        panelDic[name].OnShow(GameController.Instrance.GameData);
 
         currentPanel = panelDic[name];
-
 
         currentPanel.gameObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
@@ -89,7 +88,7 @@ public class UIManager : MonoBehaviour
 
     public GameUIPanel GetGameUIPanel()
     {
-        return currentPanel as GameUIPanel;
+        return panelDic[GameUIPanel.GetPanelName()] as GameUIPanel;
     }
 }
 

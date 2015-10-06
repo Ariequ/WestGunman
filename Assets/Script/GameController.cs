@@ -34,6 +34,7 @@ public class GameController : MonoBehaviour, IGameController
 
     private Stopwatch stopWatch;
 
+    private GameUIPanel gameUIPanel;
 
     public GameData GameData
     {
@@ -66,6 +67,7 @@ public class GameController : MonoBehaviour, IGameController
         clickHandle.Add(GameState.AfterFire, AfterFireClick);
 
         gameData = new GameData();
+        gameUIPanel = UIManager.Instance.GetGameUIPanel();
 
         stopWatch = new Stopwatch();
         stopWatch.Start();
@@ -162,7 +164,8 @@ public class GameController : MonoBehaviour, IGameController
 
         gameData.CurrentShootTime = added.ShootTime;
 
-        UIManager.Instance.GetGameUIPanel().UpdateGunManShootTimeLabel(gameData.CurrentShootTime);
+        gameUIPanel.UpdateGunManShootTimeLabel(gameData.CurrentShootTime);
+        gameUIPanel.UpdatePlayerShootTime(0);
 
         BeginFireInRandomTime();
 
@@ -192,7 +195,7 @@ public class GameController : MonoBehaviour, IGameController
 
     private void UpdatePlayerShootTime()
     {
-        UIManager.Instance.GetGameUIPanel().UpdatePlayerShootTime(stopWatch.ElapsedMilliseconds - gameData.RoundFireBeginTime);
+        gameUIPanel.UpdatePlayerShootTime(stopWatch.ElapsedMilliseconds - gameData.RoundFireBeginTime);
     }
 
     private void BeforFireClick()
@@ -224,14 +227,34 @@ public class GameController : MonoBehaviour, IGameController
         Debug.Log(gameData.PlayerShootTime);
         Debug.Log(gameData.RoundFireBeginTime);
 
-        UIManager.Instance.GetGameUIPanel().UpdatePlayerShootTime(gameData.PlayerShootTime - gameData.RoundFireBeginTime);
+        gameUIPanel.UpdatePlayerShootTime(gameData.PlayerShootTime - gameData.RoundFireBeginTime);
 
         if (Win != null)
         {
             Win(this, new GameControllerEventArgs());
         }       
 
-        StartRound();
+        StartCoroutine("AddBonus");
+    }
+
+    IEnumerator AddBonus()
+    {
+        float start = (gameData.PlayerShootTime - gameData.RoundFireBeginTime) / 1000;
+
+        float target = gameData.CurrentShootTime;
+
+        while (start < target)
+        {
+            gameData.Score += 10;
+            start += 0.01f;
+
+            gameUIPanel.UpdatePlayerShootTime(start * 1000);
+            gameUIPanel.UpdateScoreLabel(gameData.Score);
+
+            yield return 1;
+        }
+
+        Invoke("StartRound", 0.5f);
     }
 
     private void AfterFireClick()

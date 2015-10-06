@@ -7,6 +7,6 @@ public interface IUIPanel
     {
         get;
     }
-    void OnShow();
+    void OnShow(GameData gameData);
     void OnHide();
 }

@@ -25,6 +25,11 @@ public class GameUIPanel : BaseUIPanel
         animator = GetComponent<Animator>();
     }
 
+    public override void OnShow(GameData gameData)
+    {
+        ScoreLabel.text = gameData.Score.ToString();
+    }
+
     public static string GetPanelName()
     {
         return "GameUIPanel";
@@ -40,7 +45,6 @@ public class GameUIPanel : BaseUIPanel
 
     public void ShowFire()
     {
-//        FireSample.SetActive(true);
         animator.SetInteger("state", (int)State.BeginFire);
     }
 

@@ -9,11 +9,11 @@ public class GameData : IGameData
     {
         get
         {
-            return score;
+            return PlayerPrefs.GetInt("Score");
         }
         set
-        {
-            score = value;
+        {            
+            PlayerPrefs.SetInt("Score", value);
         }
     }
 

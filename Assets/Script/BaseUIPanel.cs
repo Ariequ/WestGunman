@@ -11,7 +11,7 @@ public class BaseUIPanel : MonoBehaviour,IUIPanel
         }
     }
 
-    public virtual void OnShow()
+    public virtual void OnShow(GameData gameData)
     {
     }
 
