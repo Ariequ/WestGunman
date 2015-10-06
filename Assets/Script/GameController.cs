@@ -186,6 +186,13 @@ public class GameController : MonoBehaviour, IGameController
         currentState = GameState.Fire;
 
         gameData.RoundFireBeginTime = stopWatch.ElapsedMilliseconds;
+
+        InvokeRepeating("UpdatePlayerShootTime", 0, 0.1f);
+    }
+
+    private void UpdatePlayerShootTime()
+    {
+        UIManager.Instance.GetGameUIPanel().UpdatePlayerShootTime(stopWatch.ElapsedMilliseconds - gameData.RoundFireBeginTime);
     }
 
     private void BeforFireClick()
@@ -208,9 +215,9 @@ public class GameController : MonoBehaviour, IGameController
     {
         Debug.Log("Win");
 
-        GunManManager.Instance.RemoveCurrentGunMan();
+        CancelInvoke();
 
-        StartRound();
+        GunManManager.Instance.RemoveCurrentGunMan();
 
         gameData.PlayerShootTime = stopWatch.ElapsedMilliseconds;
 
@@ -222,7 +229,9 @@ public class GameController : MonoBehaviour, IGameController
         if (Win != null)
         {
             Win(this, new GameControllerEventArgs());
-        }            
+        }       
+
+        StartRound();
     }
 
     private void AfterFireClick()
