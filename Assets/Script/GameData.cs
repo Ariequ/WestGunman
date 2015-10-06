@@ -9,11 +9,28 @@ public class GameData : IGameData
     {
         get
         {
-            return PlayerPrefs.GetInt("Score");
+            return score;
         }
         set
         {            
-            PlayerPrefs.SetInt("Score", value);
+            score = value;
+
+            if (score > HighestScore)
+            {
+                HighestScore = score;
+            }
+        }
+    }
+
+    public int HighestScore
+    {
+        get
+        {
+            return PlayerPrefs.GetInt("HighestScore");
+        }
+        set
+        {
+            PlayerPrefs.SetInt("HighestScore", value);
         }
     }
 
@@ -57,5 +74,5 @@ public class GameData : IGameData
         {
             roundFireBeginTime = value;
         }
-    }        
+    }
 }

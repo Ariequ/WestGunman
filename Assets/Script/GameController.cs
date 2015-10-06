@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour, IGameController
 
     void Start()
     {
-        UIManager.Instance.Show(StarUIPanel.GetPanelName());
+        UIManager.Instance.Show(GameUIPanel.GetPanelName());
     }
 
     void Update()
@@ -130,6 +130,9 @@ public class GameController : MonoBehaviour, IGameController
     {
         Debug.Log("Player die");
 
+        CancelInvoke();
+        StopAllCoroutines();
+
         currentState = GameState.Lose;
 
         if (Lose != null)
@@ -142,7 +145,7 @@ public class GameController : MonoBehaviour, IGameController
 
     private void ShowEndUILater()
     {
-        UIManager.Instance.Show(EndUIPanel.GetPanelName());
+        gameUIPanel.ShowEndUI();
     }
 
     public void Restart()
@@ -220,8 +223,6 @@ public class GameController : MonoBehaviour, IGameController
 
         CancelInvoke();
 
-        GunManManager.Instance.RemoveCurrentGunMan();
-
         gameData.PlayerShootTime = stopWatch.ElapsedMilliseconds;
 
         Debug.Log(gameData.PlayerShootTime);
@@ -232,28 +233,36 @@ public class GameController : MonoBehaviour, IGameController
         if (Win != null)
         {
             Win(this, new GameControllerEventArgs());
-        }       
+        }                   
 
         StartCoroutine("AddBonus");
+
+        GunManManager.Instance.RemoveCurrentGunMan();
     }
 
     IEnumerator AddBonus()
     {
-        float start = (gameData.PlayerShootTime - gameData.RoundFireBeginTime) / 1000;
+        yield return new WaitForSeconds(2f);
+
+        float start = (gameData.PlayerShootTime - gameData.RoundFireBeginTime) / 1000f;
 
         float target = gameData.CurrentShootTime;
 
-        while (start < target)
+        while (start + 0.01f < target)
         {
+            Debug.Log(start.ToString());
+
             gameData.Score += 10;
             start += 0.01f;
 
             gameUIPanel.UpdatePlayerShootTime(start * 1000);
             gameUIPanel.UpdateScoreLabel(gameData.Score);
+            gameUIPanel.UpdateHighestScoreLabel(gameData.HighestScore);
 
             yield return 1;
         }
 
+        gameUIPanel.UpdatePlayerShootTime(target * 1000);
         Invoke("StartRound", 0.5f);
     }
 

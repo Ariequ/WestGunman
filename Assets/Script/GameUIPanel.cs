@@ -4,11 +4,13 @@ using UnityEngine.UI;
 
 public class GameUIPanel : BaseUIPanel
 {
-    public Text ScoreLabel;
-    public Text GunManTimeLabel;
-    public Text PlayerTimeLabel;
+    public Text scoreLabel;
+    public Text highestLabel;
+    public Text gunManTimeLabel;
+    public Text playerTimeLabel;
 
-    public GameObject FireSample;
+    public GameObject startBtn;
+    public GameObject replayBtn;
 
     private Animator animator;
 
@@ -27,7 +29,8 @@ public class GameUIPanel : BaseUIPanel
 
     public override void OnShow(GameData gameData)
     {
-        ScoreLabel.text = gameData.Score.ToString();
+        scoreLabel.text = gameData.Score.ToString();
+        highestLabel.text = gameData.HighestScore.ToString();
     }
 
     public static string GetPanelName()
@@ -75,16 +78,39 @@ public class GameUIPanel : BaseUIPanel
 
     public void UpdateScoreLabel(int score)
     {
-        ScoreLabel.text = score.ToString();
+        scoreLabel.text = score.ToString();
+    }
+
+    public void UpdateHighestScoreLabel(int highest)
+    {
+        highestLabel.text = highest.ToString();
     }
 
     public void UpdateGunManShootTimeLabel(float time)
     {
-        GunManTimeLabel.text = time.ToString("0.00");
+        gunManTimeLabel.text = time.ToString("0.00");
     }
 
     public void UpdatePlayerShootTime(float milliseconds)
     {
-        PlayerTimeLabel.text = (milliseconds/1000).ToString("0.00");
+        playerTimeLabel.text = (milliseconds/1000).ToString("0.00");
+    }
+
+    public void OnStartBtnClick()
+    {
+        Debug.Log("on start ui panel");
+
+        startBtn.SetActive(false);
+        GameController.Instrance.StartGame();
+    }
+
+    public void OnRestartBtnClick()
+    {        
+        GameController.Instrance.Restart();
+    }
+
+    public void ShowEndUI()
+    {
+        replayBtn.SetActive(true);
     }
 }
