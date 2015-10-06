@@ -76,11 +76,11 @@ public class GameUIPanel : BaseUIPanel
 
     public void UpdateGunManShootTimeLabel(float time)
     {
-        GunManTimeLabel.text = time.ToString();
+        GunManTimeLabel.text = time.ToString("0.00");
     }
 
     public void UpdatePlayerShootTime(float milliseconds)
     {
-        PlayerTimeLabel.text = (milliseconds/1000).ToString();
+        PlayerTimeLabel.text = (milliseconds/1000).ToString("0.00");
     }
 }

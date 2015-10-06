@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     private static UIManager instance;
 
-    private IUIPanel currentPanel;
+    private BaseUIPanel currentPanel;
     private Dictionary<string, BaseUIPanel> panelDic;
 
     public static UIManager Instance
@@ -76,6 +76,9 @@ public class UIManager : MonoBehaviour
         panelDic[name].OnShow();
 
         currentPanel = panelDic[name];
+
+
+        currentPanel.gameObject.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
     public void Hide(string name)
