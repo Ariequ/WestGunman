@@ -110,8 +110,6 @@ public class GameController : MonoBehaviour, IGameController
 
     public void StartGame()
     {        
-        UIManager.Instance.Show(GameUIPanel.GetPanelName());
-
         OnStartGame(new GameControllerEventArgs());
 
         StartRound();

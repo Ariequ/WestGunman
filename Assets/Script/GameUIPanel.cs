@@ -31,6 +31,9 @@ public class GameUIPanel : BaseUIPanel
     {
         scoreLabel.text = gameData.Score.ToString();
         highestLabel.text = gameData.HighestScore.ToString();
+
+        startBtn.SetActive(true);
+        replayBtn.SetActive(false);
     }
 
     public static string GetPanelName()
