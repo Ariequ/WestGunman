@@ -99,6 +99,11 @@ public class GameUIPanel : BaseUIPanel
         playerTimeLabel.text = (milliseconds/1000).ToString("0.00");
     }
 
+    public void UpdatePlayerShootTime(string content)
+    {
+        playerTimeLabel.text = content;
+    }
+
     public void OnStartBtnClick()
     {
         Debug.Log("on start ui panel");

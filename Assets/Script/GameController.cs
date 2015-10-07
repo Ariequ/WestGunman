@@ -138,6 +138,8 @@ public class GameController : MonoBehaviour, IGameController
             Lose(this, new GameControllerEventArgs());
         }
 
+        gameUIPanel.UpdatePlayerShootTime("OVER");
+        Handheld.Vibrate();
         Invoke("ShowEndUILater", 1f);
     }
 
