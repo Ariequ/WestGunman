@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Diagnostics;
 
 public class GunMan : MonoBehaviour
 {
-    private float shootTime;
+    private long shootTime; // millisecondes
+    private Stopwatch stopwatch;
+    private long aboutShootTime;
 
     void Start()
     {
@@ -24,12 +27,15 @@ public class GunMan : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void AboutFire()
+    public void AboutFire(Stopwatch stopwatch)
     {        
-        Invoke("Fire", shootTime);
+        this.stopwatch = stopwatch;
+        aboutShootTime = stopwatch.ElapsedMilliseconds;
+
+        StartCoroutine("Fire");
     }
 
-    public float ShootTime
+    public long ShootTime
     {
         get
         {
@@ -42,8 +48,13 @@ public class GunMan : MonoBehaviour
         }
     }
 
-    private void Fire()
+    IEnumerator Fire()
     {
+        while (stopwatch.ElapsedMilliseconds - aboutShootTime < shootTime)
+        {
+            yield return 1;   
+        }
+
         GameController.Instrance.GunManFire();
     }
 }

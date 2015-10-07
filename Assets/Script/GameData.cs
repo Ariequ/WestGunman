@@ -34,9 +34,9 @@ public class GameData : IGameData
         }
     }
 
-    private float currentShootTime;
+    private long currentShootTime; //millionseconds
 
-    public float CurrentShootTime
+    public long CurrentShootTime
     {
         get
         {

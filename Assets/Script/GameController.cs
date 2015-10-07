@@ -34,6 +34,18 @@ public class GameController : MonoBehaviour, IGameController
 
     private Stopwatch stopWatch;
 
+    public Stopwatch StopWatch
+    {
+        get
+        {
+            return stopWatch;
+        }
+        set
+        {
+            stopWatch = value;
+        }
+    }
+
     private GameUIPanel gameUIPanel;
 
     public GameData GameData
@@ -82,8 +94,6 @@ public class GameController : MonoBehaviour, IGameController
     {
         if (gameStarted && Input.GetMouseButtonUp(0))
         {
-            Debug.Log(currentState.ToString());
-
             Action eventHandle;
 
             clickHandle.TryGetValue(currentState, out eventHandle);
@@ -221,6 +231,8 @@ public class GameController : MonoBehaviour, IGameController
     {
         Debug.Log("Win");
 
+        currentState = GameState.Win;
+
         CancelInvoke();
 
         gameData.PlayerShootTime = stopWatch.ElapsedMilliseconds;
@@ -244,25 +256,23 @@ public class GameController : MonoBehaviour, IGameController
     {
         yield return new WaitForSeconds(2f);
 
-        float start = (gameData.PlayerShootTime - gameData.RoundFireBeginTime) / 1000f;
+        long start = gameData.PlayerShootTime - gameData.RoundFireBeginTime;
 
-        float target = gameData.CurrentShootTime;
+        long target = gameData.CurrentShootTime;
 
-        while (start + 0.01f < target)
+        while (start + 10 < target)
         {
-            Debug.Log(start.ToString());
+            gameData.Score += 1;
+            start += 10;
 
-            gameData.Score += 10;
-            start += 0.01f;
-
-            gameUIPanel.UpdatePlayerShootTime(start * 1000);
+            gameUIPanel.UpdatePlayerShootTime(start);
             gameUIPanel.UpdateScoreLabel(gameData.Score);
             gameUIPanel.UpdateHighestScoreLabel(gameData.HighestScore);
 
             yield return 1;
         }
 
-        gameUIPanel.UpdatePlayerShootTime(target * 1000);
+        gameUIPanel.UpdatePlayerShootTime(target);
         Invoke("StartRound", 0.5f);
     }
 

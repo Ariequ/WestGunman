@@ -35,8 +35,8 @@ public class GunManManager : MonoBehaviour
     void OnBeginFire (object sender, GameControllerEventArgs e)
     {
         if (currentGunMan != null)
-        {
-            currentGunMan.AboutFire();
+        {            
+            currentGunMan.AboutFire(GameController.Instrance.StopWatch);
         }
     }
 
@@ -48,7 +48,7 @@ public class GunManManager : MonoBehaviour
 
         currentGunMan = Instantiate(man.gameObject).GetComponent<GunMan>();
 
-        currentGunMan.ShootTime = Random.Range(0.5f, 2f);
+        currentGunMan.ShootTime = Random.Range(300, 2000);
 
         return currentGunMan;
     }
